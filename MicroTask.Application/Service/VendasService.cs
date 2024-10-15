@@ -15,5 +15,14 @@ namespace MicroTask.Application.Service
 
         public async Task<IEnumerable<Vendas>> GetAllAsync() =>
             await _vendasRepository.GetAllAsync();
+        public async Task<Vendas?> GetByIdAsync(int id) =>
+            await _vendasRepository.GetByIdAsync(id);
+        public async Task<int> AddAsync(Vendas venda) =>
+            await _vendasRepository.AddAsync(venda);
+        public async Task UpdateAsync(Vendas venda) =>
+            await _vendasRepository.UpdateAsync(venda);
+        public async Task<int> DeleteAsync(int id) =>
+            await _vendasRepository.DeleteAsync(id);
+
     }
 }
