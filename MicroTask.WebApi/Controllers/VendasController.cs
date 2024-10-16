@@ -34,7 +34,7 @@ namespace MicroTask.WebApi.Controllers
             return Ok(vendas);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -60,7 +60,7 @@ namespace MicroTask.WebApi.Controllers
         public async Task<IActionResult> CreateAsync([FromBody] Vendas venda)
         {
             var result = await vendasService.AddAsync(venda);
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = result }, venda);
+            return Ok(venda); 
         }
 
         [HttpPut]
@@ -72,12 +72,12 @@ namespace MicroTask.WebApi.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteAsync(int id)
         {
             await vendasService.DeleteAsync(id);
-            return NoContent();
+            return NoContent();            
         }
     }
 }

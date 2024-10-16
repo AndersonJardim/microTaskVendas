@@ -12,16 +12,22 @@ namespace MicroTask.Infra.Data
         {
             this.dbConnection = dbConnection;
         }
-        public async Task<int> AddAsync(Vendas venda)
+        public async Task<IEnumerable<Vendas>> GetAllAsync()
         {
-            var query = "INSERT INTO Vendas (IdCliente, IdProduto) VALUES (@IdCliente, @IdProduto); SELECT CAST(SCOPE_IDENTITY() as int);";
-            return await dbConnection.QuerySingleAsync<int>(query, new { venda.IdCliente, venda.IdProduto });
+            return await dbConnection.QueryAsync<Vendas>("SELECT * FROM Vendas");
         }
         public async Task<Vendas?> GetByIdAsync(int id)
         {
-            var query = "SELECT * FROM Vendas WHERE Id = @Id";
+            var query = "SELECT TOP 1 FROM Vendas WHERE Id = @Id";
             var param = new { Id = id };
             return await dbConnection.QueryFirstOrDefaultAsync<Vendas>(query, param);
+        }
+        public async Task<Vendas> AddAsync(Vendas venda)
+        {
+            var query = "INSERT INTO Vendas (IdCliente, IdProduto) VALUES (@IdCliente, @IdProduto); ";
+            await dbConnection.ExecuteAsync(query, new { venda.IdCliente, venda.IdProduto });
+            return venda;
+
         }
         public async Task UpdateAsync(Vendas venda)
         {
@@ -32,10 +38,6 @@ namespace MicroTask.Infra.Data
         {
             var query = "DELETE FROM Vendas WHERE Id = @Id";
             return await dbConnection.ExecuteAsync(query, new { Id = id });
-        }
-        public async Task<IEnumerable<Vendas>> GetAllAsync()
-        {
-            return await dbConnection.QueryAsync<Vendas>("SELECT * FROM Vendas");
         }
     }
 }
